@@ -11,6 +11,7 @@ import { RadioSelection } from "../RadioSelection";
 import { ButtonSeparator } from "../ButtonSeparator";
 import {
   FontFamilyCodeIcon,
+  FontFamilyMathIcon,
   FontFamilyNormalIcon,
   FreedrawIcon,
 } from "../icons";
@@ -38,6 +39,12 @@ export const DEFAULT_FONTS = [
     icon: FontFamilyCodeIcon,
     text: t("labels.code"),
     testId: "font-family-code",
+  },
+  {
+    value: FONT_FAMILY.Math,
+    icon: FontFamilyMathIcon,
+    text: t("labels.math"),
+    testId: "font-family-math",
   },
 ];
 
