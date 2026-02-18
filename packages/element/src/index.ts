@@ -98,4 +98,5 @@ export * from "./transformHandles";
 export * from "./typeChecks";
 export * from "./utils";
 export * from "./zindex";
+export * from "./latexImageCache";
 export * from "./arrows/helpers";

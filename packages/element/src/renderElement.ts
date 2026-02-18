@@ -15,6 +15,7 @@ import {
   ELEMENT_READY_TO_ERASE_OPACITY,
   FRAME_STYLE,
   DARK_THEME_FILTER,
+  FONT_FAMILY,
   MIME_TYPES,
   THEME,
   distance,
@@ -67,6 +68,7 @@ import { getContainingFrame } from "./frame";
 import { getCornerRadius } from "./utils";
 
 import { ShapeCache } from "./shape";
+import { latexImageCache } from "./latexImageCache";
 
 import type {
   ExcalidrawElement,
@@ -545,53 +547,76 @@ const drawElementOnCanvas = (
     }
     default: {
       if (isTextElement(element)) {
-        const rtl = isRTL(element.text);
-        const shouldTemporarilyAttach = rtl && !context.canvas.isConnected;
-        if (shouldTemporarilyAttach) {
-          // to correctly render RTL text mixed with LTR, we have to append it
-          // to the DOM
-          document.body.appendChild(context.canvas);
-        }
-        context.canvas.setAttribute("dir", rtl ? "rtl" : "ltr");
-        context.save();
-        context.font = getFontString(element);
-        context.fillStyle =
-          renderConfig.theme === THEME.DARK
-            ? applyDarkModeFilter(element.strokeColor)
-            : element.strokeColor;
-        context.textAlign = element.textAlign as CanvasTextAlign;
-
-        // Canvas does not support multiline text by default
-        const lines = element.text.replace(/\r\n?/g, "\n").split("\n");
-
-        const horizontalOffset =
-          element.textAlign === "center"
-            ? element.width / 2
-            : element.textAlign === "right"
-            ? element.width
-            : 0;
-
-        const lineHeightPx = getLineHeightInPx(
-          element.fontSize,
-          element.lineHeight,
-        );
-
-        const verticalOffset = getVerticalOffset(
-          element.fontFamily,
-          element.fontSize,
-          lineHeightPx,
-        );
-
-        for (let index = 0; index < lines.length; index++) {
-          context.fillText(
-            lines[index],
-            horizontalOffset,
-            index * lineHeightPx + verticalOffset,
+        if (element.fontFamily === FONT_FAMILY.Math) {
+          const color =
+            renderConfig.theme === THEME.DARK
+              ? applyDarkModeFilter(element.strokeColor)
+              : element.strokeColor;
+          const cacheKey = latexImageCache.getCacheKey(
+            element.originalText,
+            element.fontSize,
+            color,
           );
-        }
-        context.restore();
-        if (shouldTemporarilyAttach) {
-          context.canvas.remove();
+          const cached = latexImageCache.get(cacheKey);
+
+          if (cached) {
+            context.save();
+            context.drawImage(cached.image, 0, 0, cached.width, cached.height);
+            context.restore();
+          } else {
+            context.save();
+            context.font = getFontString(element);
+            context.fillStyle = color;
+            context.textAlign = "left" as CanvasTextAlign;
+            context.fillText(element.originalText, 0, element.fontSize);
+            context.restore();
+          }
+        } else {
+          const rtl = isRTL(element.text);
+          const shouldTemporarilyAttach = rtl && !context.canvas.isConnected;
+          if (shouldTemporarilyAttach) {
+            document.body.appendChild(context.canvas);
+          }
+          context.canvas.setAttribute("dir", rtl ? "rtl" : "ltr");
+          context.save();
+          context.font = getFontString(element);
+          context.fillStyle =
+            renderConfig.theme === THEME.DARK
+              ? applyDarkModeFilter(element.strokeColor)
+              : element.strokeColor;
+          context.textAlign = element.textAlign as CanvasTextAlign;
+
+          const lines = element.text.replace(/\r\n?/g, "\n").split("\n");
+
+          const horizontalOffset =
+            element.textAlign === "center"
+              ? element.width / 2
+              : element.textAlign === "right"
+              ? element.width
+              : 0;
+
+          const lineHeightPx = getLineHeightInPx(
+            element.fontSize,
+            element.lineHeight,
+          );
+
+          const verticalOffset = getVerticalOffset(
+            element.fontFamily,
+            element.fontSize,
+            lineHeightPx,
+          );
+
+          for (let index = 0; index < lines.length; index++) {
+            context.fillText(
+              lines[index],
+              horizontalOffset,
+              index * lineHeightPx + verticalOffset,
+            );
+          }
+          context.restore();
+          if (shouldTemporarilyAttach) {
+            context.canvas.remove();
+          }
         }
       } else {
         throw new Error(`Unimplemented type ${element.type}`);

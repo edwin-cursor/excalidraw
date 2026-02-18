@@ -1,5 +1,6 @@
 import {
   applyDarkModeFilter,
+  FONT_FAMILY,
   FRAME_STYLE,
   THEME,
   throttleRAF,
@@ -19,6 +20,7 @@ import {
 } from "@excalidraw/element";
 
 import { renderElement } from "@excalidraw/element";
+import { elementWithCanvasCache } from "@excalidraw/element";
 
 import { getElementAbsoluteCoords } from "@excalidraw/element";
 
@@ -27,6 +29,8 @@ import type {
   ExcalidrawFrameLikeElement,
   NonDeletedExcalidrawElement,
 } from "@excalidraw/element/types";
+
+import { renderLatexToCache } from "../latex";
 
 import {
   EXTERNAL_LINK_IMG,
@@ -274,6 +278,22 @@ const _renderStaticScene = ({
       normalizedHeight / appState.zoom.value,
     );
   }
+
+  visibleElements.forEach((element) => {
+    if (
+      isTextElement(element) &&
+      element.fontFamily === FONT_FAMILY.Math &&
+      element.originalText.trim()
+    ) {
+      const color =
+        appState.theme === THEME.DARK
+          ? applyDarkModeFilter(element.strokeColor)
+          : element.strokeColor;
+      renderLatexToCache(element.originalText, element.fontSize, color, () => {
+        elementWithCanvasCache.delete(element);
+      });
+    }
+  });
 
   const groupsToBeAddedToFrame = new Set<string>();
 
