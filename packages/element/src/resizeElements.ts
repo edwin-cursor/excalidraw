@@ -370,6 +370,7 @@ export const resizeSingleTextElement = (
       text,
       getFontString(element),
       element.lineHeight,
+      element.fontFamily,
     );
 
     const newHeight = metrics.height;

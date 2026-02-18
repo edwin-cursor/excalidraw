@@ -586,6 +586,7 @@ export const convertToExcalidrawElements = (
           normalizedText,
           getFontString({ fontFamily, fontSize }),
           lineHeight,
+          fontFamily,
         );
 
         excalidrawElement = newTextElement({

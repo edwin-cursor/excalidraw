@@ -2,10 +2,13 @@ import {
   BOUND_TEXT_PADDING,
   DEFAULT_FONT_SIZE,
   DEFAULT_FONT_FAMILY,
+  FONT_FAMILY,
   getFontString,
   isTestEnv,
   normalizeEOL,
 } from "@excalidraw/common";
+
+import { measureLatexText } from "./latexImageCache";
 
 import type { FontString, ExcalidrawTextElement } from "./types";
 
@@ -13,11 +16,18 @@ export const measureText = (
   text: string,
   font: FontString,
   lineHeight: ExcalidrawTextElement["lineHeight"],
+  fontFamily?: number,
 ) => {
+  if (fontFamily === FONT_FAMILY.Math) {
+    const fontSize = parseFloat(font);
+    const latexMeasure = measureLatexText(text, fontSize);
+    if (latexMeasure) {
+      return { width: latexMeasure.width, height: latexMeasure.height };
+    }
+  }
+
   const _text = text
     .split("\n")
-    // replace empty lines with single space because leading/trailing empty
-    // lines would be stripped from computation
     .map((x) => x || " ")
     .join("\n");
   const fontSize = parseFloat(font);

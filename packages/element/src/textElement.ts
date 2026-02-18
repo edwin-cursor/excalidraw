@@ -89,6 +89,7 @@ export const redrawTextBoundingBox = (
     boundTextUpdates.text,
     getFontString(textElement),
     textElement.lineHeight,
+    textElement.fontFamily,
   );
 
   // Note: only update width for unwrapped text and bound texts (which always have autoResize set to true)
@@ -178,6 +179,7 @@ export const handleBindTextResize = (
         text,
         getFontString(textElement),
         textElement.lineHeight,
+        textElement.fontFamily,
       );
       nextHeight = metrics.height;
       nextWidth = metrics.width;

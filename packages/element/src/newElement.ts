@@ -257,6 +257,7 @@ export const newTextElement = (
     text,
     getFontString({ fontFamily, fontSize }),
     lineHeight,
+    fontFamily,
   );
   const textAlign = opts.textAlign || DEFAULT_TEXT_ALIGN;
   const verticalAlign = opts.verticalAlign || DEFAULT_VERTICAL_ALIGN;
@@ -304,6 +305,7 @@ const getAdjustedDimensions = (
     nextText,
     getFontString(element),
     element.lineHeight,
+    element.fontFamily,
   );
 
   // wrapped text
@@ -324,6 +326,7 @@ const getAdjustedDimensions = (
       element.text,
       getFontString(element),
       element.lineHeight,
+      element.fontFamily,
     );
     const offsets = getTextElementPositionOffsets(element, {
       width: nextWidth - prevMetrics.width,
