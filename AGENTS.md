@@ -16,7 +16,7 @@ Excalidraw is a Yarn workspaces monorepo (Yarn Classic 1.22.22, Node >= 18). The
 Standard commands from root `package.json`:
 
 | Task | Command |
-|---|---|
+| --- | --- |
 | Lint (ESLint) | `yarn test:code` |
 | Format check (Prettier) | `yarn test:other` |
 | TypeScript typecheck | `yarn test:typecheck` |
