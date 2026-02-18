@@ -2,6 +2,8 @@ import React, { useEffect } from "react";
 
 import { DEFAULT_UI_OPTIONS, isShallowEqual } from "@excalidraw/common";
 
+import "katex/dist/katex.min.css";
+
 import App from "./components/App";
 import { InitializeApp } from "./components/InitializeApp";
 import Footer from "./components/footer/FooterCenter";
@@ -15,6 +17,7 @@ import polyfill from "./polyfill";
 import "./css/app.scss";
 import "./css/styles.scss";
 import "./fonts/fonts.css";
+import "./latex";
 
 import type { AppProps, ExcalidrawProps } from "./types";
 
