@@ -1,0 +1,70 @@
+@use "../../css/variables.module" as *;
+
+.excalidraw {
+  .color-wheel-picker {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    align-items: center;
+    padding: 0 0.25rem;
+  }
+
+  .color-wheel-picker__heading {
+    font-size: 0.75rem;
+    width: 100%;
+    padding: 0 0.25rem;
+    text-align: left;
+    color: var(--text-primary-color);
+    opacity: 0.85;
+  }
+
+  .color-wheel-picker__wheel {
+    --color-wheel-pointer-r: 5px;
+    /* Middle of hue ring: outer R = 3.5rem, inner R = 3.5rem - 2.375rem */
+    --color-wheel-hue-offset: calc(((3.5rem + (3.5rem - 2.375rem)) / 2) * -1);
+
+    position: relative;
+    width: 7rem;
+    height: 7rem;
+    flex-shrink: 0;
+    border-radius: 50%;
+    cursor: crosshair;
+    touch-action: none;
+
+    background: conic-gradient(
+      from 0deg,
+      hsl(0, 100%, 50%),
+      hsl(60, 100%, 50%),
+      hsl(120, 100%, 50%),
+      hsl(180, 100%, 50%),
+      hsl(240, 100%, 50%),
+      hsl(300, 100%, 50%),
+      hsl(360, 100%, 50%)
+    );
+    box-shadow: inset 0 0 0 2.375rem var(--popup-bg-color),
+      0 0 0 1px var(--default-border-color);
+    outline: none;
+  }
+
+  .color-wheel-picker__wheel:focus-visible {
+    box-shadow: inset 0 0 0 2.375rem var(--popup-bg-color),
+      0 0 0 2px var(--focus-highlight-color);
+  }
+
+  .color-wheel-picker__pointer {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: calc(var(--color-wheel-pointer-r) * 2);
+    height: calc(var(--color-wheel-pointer-r) * 2);
+    margin: calc(var(--color-wheel-pointer-r) * -1) 0 0
+      calc(var(--color-wheel-pointer-r) * -1);
+    border-radius: 50%;
+    border: 2px solid #fff;
+    box-shadow: 0 0 0 1px rgb(0 0 0 / 35%), 0 1px 3px rgb(0 0 0 / 25%);
+    pointer-events: none;
+    transform-origin: 50% 50%;
+    /* Middle of hue ring — keep in sync with ColorWheelPicker.tsx RING_MIDDLE_OFFSET_PX */
+    transform: rotate(0deg) translateY(var(--color-wheel-hue-offset));
+  }
+}

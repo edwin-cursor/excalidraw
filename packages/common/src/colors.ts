@@ -279,6 +279,39 @@ export const rgbToHex = (r: number, g: number, b: number, a?: number) => {
   return hex6;
 };
 
+/** HSV values as used by tinycolor: h in [0,360), s and v in [0,1]. */
+export type Hsv = { h: number; s: number; v: number };
+
+/**
+ * Converts HSV to a fully opaque hex color (#RRGGBB).
+ * Hues outside [0,360) are normalized modulo 360; s and v are clamped to [0,1].
+ */
+export const hsvToHex = (h: number, s: number, v: number): string => {
+  const hue = ((h % 360) + 360) % 360;
+  const sat = clamp(s, 0, 1);
+  const val = clamp(v, 0, 1);
+  const tc = tinycolor({ h: hue, s: sat, v: val });
+  const { r, g, b } = tc.toRgb();
+  return rgbToHex(r, g, b);
+};
+
+/**
+ * Parses a color into HSV for the stroke color wheel. Invalid, null, empty, or
+ * transparent colors default to saturated red (same as a typical wheel default).
+ */
+export const colorToHsvForWheel = (color: string | null): Hsv => {
+  if (!color || isTransparent(color)) {
+    return { h: 0, s: 1, v: 1 };
+  }
+  const tc = tinycolor(color);
+  if (!tc.isValid()) {
+    return { h: 0, s: 1, v: 1 };
+  }
+  const { h, s, v } = tc.toHsv();
+  const hue = typeof h === "number" && !Number.isNaN(h) ? h : 0;
+  return { h: hue, s, v };
+};
+
 /**
  * @returns #RRGGBB or #RRGGBBAA based on color containing non-opaque alpha,
  *  null if not valid color

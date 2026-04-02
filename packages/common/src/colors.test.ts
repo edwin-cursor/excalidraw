@@ -1,6 +1,8 @@
 import {
   applyDarkModeFilter,
+  colorToHsvForWheel,
   COLOR_PALETTE,
+  hsvToHex,
   rgbToHex,
 } from "@excalidraw/common";
 
@@ -282,5 +284,33 @@ describe("rgbToHex", () => {
       // 0.05 * 255 = 12.75 -> rounds to 13 = 0x0d
       expect(rgbToHex(255, 0, 0, 0.05)).toBe("#ff00000d");
     });
+  });
+});
+
+describe("hsvToHex", () => {
+  it("converts pure hues at full saturation and value", () => {
+    expect(hsvToHex(0, 1, 1)).toBe("#ff0000");
+    expect(hsvToHex(120, 1, 1)).toBe("#00ff00");
+    expect(hsvToHex(240, 1, 1)).toBe("#0000ff");
+  });
+
+  it("normalizes hue modulo 360", () => {
+    expect(hsvToHex(360, 1, 1)).toBe("#ff0000");
+    expect(hsvToHex(-120, 1, 1)).toBe("#0000ff");
+  });
+});
+
+describe("colorToHsvForWheel", () => {
+  it("defaults for null, empty, and transparent", () => {
+    expect(colorToHsvForWheel(null)).toEqual({ h: 0, s: 1, v: 1 });
+    expect(colorToHsvForWheel("")).toEqual({ h: 0, s: 1, v: 1 });
+    expect(colorToHsvForWheel("transparent")).toEqual({ h: 0, s: 1, v: 1 });
+  });
+
+  it("parses hex colors", () => {
+    const hsv = colorToHsvForWheel("#00ff00");
+    expect(hsv.h).toBeCloseTo(120, 0);
+    expect(hsv.s).toBeCloseTo(1, 1);
+    expect(hsv.v).toBeCloseTo(1, 1);
   });
 });

@@ -16,6 +16,7 @@ import { useAtom } from "../../editor-jotai";
 import { t } from "../../i18n";
 
 import { CustomColorList } from "./CustomColorList";
+import { ColorWheelPicker } from "./ColorWheelPicker";
 import PickerColorList from "./PickerColorList";
 import PickerHeading from "./PickerHeading";
 import { ShadeList } from "./ShadeList";
@@ -180,6 +181,10 @@ export const Picker = React.forwardRef(
                 onChange={onChange}
               />
             </div>
+          )}
+
+          {type === "elementStroke" && (
+            <ColorWheelPicker color={color} onChange={onChange} />
           )}
 
           <div>
