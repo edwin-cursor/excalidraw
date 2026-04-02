@@ -1,6 +1,8 @@
 import {
   applyDarkModeFilter,
+  colorToHsv,
   COLOR_PALETTE,
+  hsvToHex,
   rgbToHex,
 } from "@excalidraw/common";
 
@@ -282,5 +284,24 @@ describe("rgbToHex", () => {
       // 0.05 * 255 = 12.75 -> rounds to 13 = 0x0d
       expect(rgbToHex(255, 0, 0, 0.05)).toBe("#ff00000d");
     });
+  });
+});
+
+describe("colorToHsv and hsvToHex", () => {
+  it("returns null for transparent", () => {
+    expect(colorToHsv("transparent")).toBeNull();
+  });
+
+  it("round-trips pure red", () => {
+    const hsv = colorToHsv("#ff0000");
+    expect(hsv).not.toBeNull();
+    expect(hsvToHex(hsv!.h, hsv!.s, hsv!.v)).toBe("#ff0000");
+  });
+
+  it("round-trips a midsaturation color", () => {
+    const hex = "#647d8e";
+    const hsv = colorToHsv(hex);
+    expect(hsv).not.toBeNull();
+    expect(hsvToHex(hsv!.h, hsv!.s, hsv!.v)).toBe(hex);
   });
 });

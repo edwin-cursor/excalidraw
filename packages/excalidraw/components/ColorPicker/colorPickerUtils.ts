@@ -89,6 +89,7 @@ export const getMostUsedCustomColors = (
 
 export type ActiveColorPickerSectionAtomType =
   | "custom"
+  | "colorWheel"
   | "baseColors"
   | "shades"
   | "hex"

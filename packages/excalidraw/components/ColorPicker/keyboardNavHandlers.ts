@@ -119,6 +119,7 @@ interface ColorPickerKeyNavHandlerProps {
   activeShade: number;
   onEyeDropperToggle: (force?: boolean) => void;
   onEscape: (event: React.KeyboardEvent | KeyboardEvent) => void;
+  includeColorWheel?: boolean;
 }
 
 /**
@@ -136,6 +137,7 @@ export const colorPickerKeyNavHandler = ({
   activeShade,
   onEyeDropperToggle,
   onEscape,
+  includeColorWheel = false,
 }: ColorPickerKeyNavHandlerProps): boolean => {
   if (event[KEYS.CTRL_OR_CMD]) {
     return false;
@@ -165,6 +167,7 @@ export const colorPickerKeyNavHandler = ({
       boolean
     > = {
       custom: !!customColors.length,
+      colorWheel: includeColorWheel,
       baseColors: true,
       shades: colorObj?.shade != null,
       hex: true,
@@ -194,6 +197,10 @@ export const colorPickerKeyNavHandler = ({
 
     if (nextSection === "custom") {
       onChange(customColors[0]);
+    } else if (nextSection === "colorWheel") {
+      if (!color) {
+        onChange(COLOR_PALETTE.black);
+      }
     } else if (nextSection === "baseColors") {
       const baseColorName = (
         Object.entries(palette) as [string, ValueOf<ColorPalette>][]
