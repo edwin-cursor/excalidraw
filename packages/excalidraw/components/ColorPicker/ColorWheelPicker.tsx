@@ -1,5 +1,7 @@
 import { useCallback, useRef } from "react";
 
+import { clamp } from "@excalidraw/math";
+
 import { colorToHsvForWheel, hsvToHex } from "@excalidraw/common";
 
 import { t } from "../../i18n";
@@ -11,28 +13,26 @@ type ColorWheelPickerProps = {
   onChange: (hex: string) => void;
 };
 
-/**
- * Hue ring geometry matches ColorWheelPicker.scss: outer radius = half of box,
- * inset equals 2.375/7 of width so inner radius = outer * (1 - 2*2.375/7).
- */
-const hueFromClientPoint = (
+const polarFromClientPoint = (
   rect: DOMRect,
   clientX: number,
   clientY: number,
-): number | null => {
+): { hue: number; saturation: number } | null => {
   const cx = rect.left + rect.width / 2;
   const cy = rect.top + rect.height / 2;
   const relX = clientX - cx;
   const relY = clientY - cy;
-  const outerR = rect.width / 2;
-  const innerR = outerR * (1 - (2 * 2.375) / 7);
+  //! Half width minus ~1px border fudge
+  const maxR = rect.width / 2 - 1;
   const dist = Math.hypot(relX, relY);
-  const pad = outerR * 0.06;
-  if (dist < innerR - pad || dist > outerR + pad) {
+  const pad = maxR * 0.02;
+  if (dist > maxR + pad) {
     return null;
   }
+  const saturation = clamp(dist / maxR, 0, 1);
   const angle = (Math.atan2(relX, -relY) * 180) / Math.PI;
-  return ((angle % 360) + 360) % 360;
+  const hue = ((angle % 360) + 360) % 360;
+  return { hue, saturation };
 };
 
 export const ColorWheelPicker = ({
@@ -43,11 +43,11 @@ export const ColorWheelPicker = ({
 
   const { h, s, v } = colorToHsvForWheel(color);
 
-  const applyHue = useCallback(
-    (hue: number) => {
-      onChange(hsvToHex(hue, s, v));
+  const applyHsv = useCallback(
+    (hue: number, saturation: number) => {
+      onChange(hsvToHex(hue, saturation, v));
     },
-    [onChange, s, v],
+    [onChange, v],
   );
 
   const pickAt = useCallback(
@@ -56,16 +56,16 @@ export const ColorWheelPicker = ({
       if (!el) {
         return;
       }
-      const hue = hueFromClientPoint(
+      const polar = polarFromClientPoint(
         el.getBoundingClientRect(),
         clientX,
         clientY,
       );
-      if (hue != null) {
-        applyHue(hue);
+      if (polar != null) {
+        applyHsv(polar.hue, polar.saturation);
       }
     },
-    [applyHue],
+    [applyHsv],
   );
 
   return (
@@ -92,7 +92,7 @@ export const ColorWheelPicker = ({
             return;
           }
           e.preventDefault();
-          applyHue(h + delta);
+          applyHsv(h + delta, s);
         }}
         onPointerDown={(e) => {
           if (e.button !== 0) {
@@ -111,7 +111,7 @@ export const ColorWheelPicker = ({
         <div
           className="color-wheel-picker__pointer"
           style={{
-            transform: `rotate(${h}deg) translateY(var(--color-wheel-hue-offset))`,
+            transform: `rotate(${h}deg) translateY(calc(-1 * ${s} * var(--color-wheel-thumb-travel)))`,
           }}
         />
       </div>
