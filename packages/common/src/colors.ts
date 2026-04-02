@@ -292,6 +292,30 @@ export const colorToHex = (color: string): string | null => {
   return rgbToHex(r, g, b, a);
 };
 
+/** HSV from tinycolor: h in [0, 360), s and v in [0, 1]. */
+export const colorToHsv = (
+  color: string,
+): { h: number; s: number; v: number } | null => {
+  const tc = tinycolor(color);
+  if (!tc.isValid() || isTransparent(color)) {
+    return null;
+  }
+  const hsv = tc.toHsv();
+  return { h: hsv.h, s: hsv.s, v: hsv.v };
+};
+
+export const hsvToHex = (h: number, s: number, v: number): string => {
+  return tinycolor({ h, s, v }).toHexString();
+};
+
+export const hsvToRgb = (
+  h: number,
+  s: number,
+  v: number,
+): { r: number; g: number; b: number } => {
+  return tinycolor({ h, s, v }).toRgb();
+};
+
 export const isTransparent = (color: string) => {
   return tinycolor(color).getAlpha() === 0;
 };

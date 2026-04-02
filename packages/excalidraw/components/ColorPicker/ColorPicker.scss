@@ -262,6 +262,37 @@
     outline: none;
   }
 
+  .color-picker__wheel-wrap {
+    position: relative;
+    width: fit-content;
+    padding: 0 0.5rem;
+  }
+
+  .color-picker__wheel-canvas {
+    display: block;
+    width: 196px;
+    height: 196px;
+    border-radius: 50%;
+    cursor: crosshair;
+    touch-action: none;
+    box-shadow: 0 0 0 1px var(--default-border-color);
+  }
+
+  .color-picker__wheel-marker {
+    pointer-events: none;
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    margin-left: -6px;
+    margin-top: -6px;
+    border-radius: 50%;
+    box-sizing: border-box;
+    border: 2px solid #fff;
+    box-shadow:
+      0 0 0 1px rgb(0 0 0 / 35%),
+      inset 0 0 0 1px rgb(0 0 0 / 15%);
+  }
+
   .color-picker-content--default {
     padding: 0.5rem;
     display: grid;

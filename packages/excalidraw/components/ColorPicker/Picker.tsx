@@ -16,6 +16,7 @@ import { useAtom } from "../../editor-jotai";
 import { t } from "../../i18n";
 
 import { CustomColorList } from "./CustomColorList";
+import { HueSaturationWheel } from "./HueSaturationWheel";
 import PickerColorList from "./PickerColorList";
 import PickerHeading from "./PickerHeading";
 import { ShadeList } from "./ShadeList";
@@ -155,6 +156,7 @@ export const Picker = React.forwardRef(
               updateData,
               activeShade,
               onEscape,
+              includeColorWheel: type === "elementStroke",
             });
 
             if (handled) {
@@ -179,6 +181,13 @@ export const Picker = React.forwardRef(
                 label={t("colorPicker.mostUsedCustomColors")}
                 onChange={onChange}
               />
+            </div>
+          )}
+
+          {type === "elementStroke" && (
+            <div>
+              <PickerHeading>{t("colorPicker.colorWheel")}</PickerHeading>
+              <HueSaturationWheel color={color} onChange={onChange} />
             </div>
           )}
 
