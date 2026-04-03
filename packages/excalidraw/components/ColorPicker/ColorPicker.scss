@@ -8,6 +8,15 @@
     }
   }
 
+  .color-picker-wheel-wrap {
+    padding: 0 0.375rem;
+  }
+
+  .color-picker-wheel-canvas {
+    cursor: crosshair;
+    border-radius: 4px;
+  }
+
   .color-picker__title {
     padding: 0 0.5rem;
     font-size: 0.875rem;

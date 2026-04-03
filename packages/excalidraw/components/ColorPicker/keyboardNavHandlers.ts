@@ -1,4 +1,12 @@
-import { COLORS_PER_ROW, COLOR_PALETTE, KEYS } from "@excalidraw/common";
+import {
+  COLORS_PER_ROW,
+  COLOR_PALETTE,
+  KEYS,
+  colorToHsv,
+  hsvToHex,
+} from "@excalidraw/common";
+
+import { clamp } from "@excalidraw/math";
 
 import type {
   ColorPickerColor,
@@ -167,6 +175,7 @@ export const colorPickerKeyNavHandler = ({
       custom: !!customColors.length,
       baseColors: true,
       shades: colorObj?.shade != null,
+      colorWheel: true,
       hex: true,
     };
 
@@ -282,6 +291,33 @@ export const colorPickerKeyNavHandler = ({
       const newColor = customColors[newColorIndex];
       onChange(newColor);
       return true;
+    }
+  }
+
+  if (activeColorPickerSection === "colorWheel" && color) {
+    const hsv = colorToHsv(color);
+    if (hsv) {
+      const dh = 4;
+      const dsv = 0.03;
+      let { h, s, v, a } = hsv;
+      let changed = false;
+      if (event.key === KEYS.ARROW_LEFT) {
+        h = (h - dh + 360) % 360;
+        changed = true;
+      } else if (event.key === KEYS.ARROW_RIGHT) {
+        h = (h + dh) % 360;
+        changed = true;
+      } else if (event.key === KEYS.ARROW_UP) {
+        v = clamp(v + dsv, 0, 1);
+        changed = true;
+      } else if (event.key === KEYS.ARROW_DOWN) {
+        v = clamp(v - dsv, 0, 1);
+        changed = true;
+      }
+      if (changed) {
+        onChange(hsvToHex(h, s, v, a));
+        return true;
+      }
     }
   }
 

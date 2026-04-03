@@ -91,6 +91,7 @@ export type ActiveColorPickerSectionAtomType =
   | "custom"
   | "baseColors"
   | "shades"
+  | "colorWheel"
   | "hex"
   | null;
 export const activeColorPickerSectionAtom =
