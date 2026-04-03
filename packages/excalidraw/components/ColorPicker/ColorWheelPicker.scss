@@ -1,0 +1,91 @@
+@use "../../css/variables.module" as *;
+
+.excalidraw {
+  .color-wheel-picker {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    align-items: center;
+    padding: 0 0.25rem;
+  }
+
+  .color-wheel-picker__heading {
+    font-size: 0.75rem;
+    width: 100%;
+    padding: 0 0.25rem;
+    text-align: left;
+    color: var(--text-primary-color);
+    opacity: 0.85;
+  }
+
+  .color-wheel-picker--compact {
+    padding: 0;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .color-wheel-picker__wheel {
+    --color-wheel-pointer-r: 5px;
+    --color-wheel-size: 7rem;
+    --color-wheel-radius: calc(var(--color-wheel-size) / 2);
+    /* Thumb travels from center (s=0) to near rim (s=1) */
+    --color-wheel-thumb-travel: calc(
+      var(--color-wheel-radius) - var(--color-wheel-pointer-r) - 3px
+    );
+
+    position: relative;
+    width: var(--color-wheel-size);
+    height: var(--color-wheel-size);
+    flex-shrink: 0;
+    border-radius: 50%;
+    cursor: crosshair;
+    touch-action: none;
+    box-sizing: border-box;
+
+    /* Full disk: white center (desaturated) → pure hues at rim */
+    background: radial-gradient(
+        circle closest-side,
+        rgb(255, 255, 255),
+        rgba(255, 255, 255, 0)
+      ),
+      conic-gradient(
+        from 0deg,
+        hsl(0, 100%, 50%),
+        hsl(60, 100%, 50%),
+        hsl(120, 100%, 50%),
+        hsl(180, 100%, 50%),
+        hsl(240, 100%, 50%),
+        hsl(300, 100%, 50%),
+        hsl(360, 100%, 50%)
+      );
+    box-shadow: 0 0 0 1px var(--default-border-color);
+    outline: none;
+  }
+
+  .color-wheel-picker__wheel:focus-visible {
+    box-shadow: 0 0 0 1px var(--default-border-color),
+      0 0 0 3px var(--focus-highlight-color);
+  }
+
+  .color-wheel-picker__pointer {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: calc(var(--color-wheel-pointer-r) * 2);
+    height: calc(var(--color-wheel-pointer-r) * 2);
+    margin: calc(var(--color-wheel-pointer-r) * -1) 0 0
+      calc(var(--color-wheel-pointer-r) * -1);
+    border-radius: 50%;
+    border: 2px solid #fff;
+    box-shadow: 0 0 0 1px rgb(0 0 0 / 35%), 0 1px 3px rgb(0 0 0 / 25%);
+    pointer-events: none;
+    transform-origin: 50% 50%;
+    transform: rotate(0deg)
+      translateY(calc(-1 * var(--color-wheel-thumb-travel)));
+  }
+
+  .color-wheel-picker--compact .color-wheel-picker__wheel {
+    --color-wheel-size: 4.25rem;
+    --color-wheel-pointer-r: 4px;
+  }
+}

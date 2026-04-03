@@ -40,6 +40,7 @@ import { PasteChartDialog } from "./PasteChartDialog";
 import { Section } from "./Section";
 import Stack from "./Stack";
 import { UserList } from "./UserList";
+import { ColorWheelPicker } from "./ColorPicker/ColorWheelPicker";
 import { PenModeButton } from "./PenModeButton";
 import Footer from "./footer/Footer";
 import { isSidebarDockedAtom } from "./Sidebar/Sidebar";
@@ -372,6 +373,20 @@ const LayerUI = ({
                               UIOptions={UIOptions}
                               app={app}
                             />
+                            {appState.activeTool.type === "freedraw" && (
+                              <>
+                                <div className="App-toolbar__divider" />
+                                <ColorWheelPicker
+                                  variant="compact"
+                                  color={appState.currentItemStrokeColor}
+                                  onChange={(hex) =>
+                                    setAppState({
+                                      currentItemStrokeColor: hex,
+                                    })
+                                  }
+                                />
+                              </>
+                            )}
                           </Stack.Row>
                         </Island>
                         {isCollaborating && (
