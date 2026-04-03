@@ -15,6 +15,7 @@ import type { ColorPaletteCustom } from "@excalidraw/common";
 import { useAtom } from "../../editor-jotai";
 import { t } from "../../i18n";
 
+import { ColorWheelPicker } from "./ColorWheelPicker";
 import { CustomColorList } from "./CustomColorList";
 import PickerColorList from "./PickerColorList";
 import PickerHeading from "./PickerHeading";
@@ -167,6 +168,13 @@ export const Picker = React.forwardRef(
           tabIndex={-1}
         >
           {title && <div className="color-picker__title">{title}</div>}
+
+          {type === "elementStroke" && (
+            <div>
+              <PickerHeading>{t("colorPicker.colorWheel")}</PickerHeading>
+              <ColorWheelPicker color={color} onChange={onChange} />
+            </div>
+          )}
 
           {!!customColors.length && (
             <div>
