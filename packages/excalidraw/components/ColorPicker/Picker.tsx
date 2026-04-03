@@ -19,6 +19,7 @@ import { CustomColorList } from "./CustomColorList";
 import PickerColorList from "./PickerColorList";
 import PickerHeading from "./PickerHeading";
 import { ShadeList } from "./ShadeList";
+import { StrokeColorWheel } from "./StrokeColorWheel";
 import {
   activeColorPickerSectionAtom,
   getColorNameAndShadeFromColor,
@@ -167,6 +168,10 @@ export const Picker = React.forwardRef(
           tabIndex={-1}
         >
           {title && <div className="color-picker__title">{title}</div>}
+
+          {type === "elementStroke" && (
+            <StrokeColorWheel color={color} onChange={onChange} />
+          )}
 
           {!!customColors.length && (
             <div>

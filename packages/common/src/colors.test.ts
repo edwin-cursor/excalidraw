@@ -1,6 +1,8 @@
 import {
   applyDarkModeFilter,
   COLOR_PALETTE,
+  colorToHsv,
+  hsvToOpaqueHex,
   rgbToHex,
 } from "@excalidraw/common";
 
@@ -282,5 +284,24 @@ describe("rgbToHex", () => {
       // 0.05 * 255 = 12.75 -> rounds to 13 = 0x0d
       expect(rgbToHex(255, 0, 0, 0.05)).toBe("#ff00000d");
     });
+  });
+});
+
+describe("colorToHsv and hsvToOpaqueHex", () => {
+  it("round-trips a saturated color", () => {
+    const hex = "#3399ff";
+    const hsv = colorToHsv(hex);
+    expect(hsv).not.toBeNull();
+    expect(hsvToOpaqueHex(hsv!)).toBe(hex);
+  });
+
+  it("returns null for empty or transparent", () => {
+    expect(colorToHsv("")).toBeNull();
+    expect(colorToHsv(null)).toBeNull();
+    expect(colorToHsv("transparent")).toBeNull();
+  });
+
+  it("uses hue 0 when hsv hue is not finite", () => {
+    expect(hsvToOpaqueHex({ h: NaN, s: 0, v: 0.5 })).toBe("#808080");
   });
 });
