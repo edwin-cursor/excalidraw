@@ -262,6 +262,33 @@
     outline: none;
   }
 
+  .color-wheel-picker {
+    display: flex;
+    justify-content: center;
+    padding: 0 0.25rem 0.25rem;
+
+    &__surface {
+      position: relative;
+      flex-shrink: 0;
+    }
+
+    &__canvas {
+      display: block;
+      border-radius: 50%;
+      cursor: crosshair;
+      touch-action: none;
+    }
+
+    &__thumb {
+      position: absolute;
+      pointer-events: none;
+      border-radius: 50%;
+      box-sizing: border-box;
+      border: 2px solid #fff;
+      box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.35), 0 1px 4px rgba(0, 0, 0, 0.25);
+    }
+  }
+
   .color-picker-content--default {
     padding: 0.5rem;
     display: grid;
