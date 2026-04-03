@@ -1,0 +1,73 @@
+@use "../../css/variables.module" as *;
+
+.excalidraw .stroke-color-wheel {
+  padding: 0 0.5rem;
+
+  &__heading {
+    font-size: 0.75rem;
+    text-align: left;
+    margin-bottom: 0.35rem;
+  }
+
+  &__disk-wrap {
+    position: relative;
+    width: fit-content;
+    margin: 0 auto 0.5rem;
+    touch-action: none;
+    cursor: crosshair;
+    border-radius: 50%;
+    box-shadow: inset 0 0 0 1px var(--default-border-color);
+  }
+
+  &__disk {
+    display: block;
+    border-radius: 50%;
+    filter: var(--theme-filter);
+  }
+
+  &__thumb {
+    position: absolute;
+    border-radius: 50%;
+    box-sizing: border-box;
+    border: 2px solid #fff;
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.35);
+    pointer-events: none;
+    filter: var(--theme-filter);
+  }
+
+  &__value {
+    position: relative;
+    height: 1.25rem;
+    border-radius: 4px;
+    margin: 0 0 0.25rem;
+    touch-action: none;
+    cursor: pointer;
+    outline: none;
+
+    &:focus-visible {
+      box-shadow: 0 0 0 2px var(--focus-highlight-color);
+    }
+  }
+
+  &__value-gradient {
+    position: absolute;
+    inset: 0;
+    border-radius: 4px;
+    filter: var(--theme-filter);
+    box-shadow: inset 0 0 0 1px var(--default-border-color);
+  }
+
+  &__value-thumb {
+    position: absolute;
+    top: 50%;
+    margin-top: -6px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 2px solid #fff;
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.4);
+    pointer-events: none;
+    box-sizing: border-box;
+    filter: none;
+  }
+}

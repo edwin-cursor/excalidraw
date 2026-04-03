@@ -578,7 +578,9 @@
     "colors": "Colors",
     "shades": "Shades",
     "hexCode": "Hex code",
-    "noShades": "No shades available for this color"
+    "noShades": "No shades available for this color",
+    "colorWheel": "Color wheel",
+    "brightness": "Brightness"
   },
   "overwriteConfirm": {
     "action": {
