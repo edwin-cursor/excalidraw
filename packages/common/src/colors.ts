@@ -354,3 +354,36 @@ export const normalizeInputColor = (color: string): string | null => {
 
   return null;
 };
+
+/** HSV in tinycolor2 units: h 0–360, s and v 0–1 */
+export type HsvColor = { h: number; s: number; v: number };
+
+/**
+ * Converts a CSS color string to HSV. Empty or invalid input yields null.
+ * Grayscale colors may report h as NaN; callers can substitute a fallback hue.
+ */
+export const colorToHsv = (color: string | null): HsvColor | null => {
+  if (color == null || !String(color).trim()) {
+    return null;
+  }
+  if (isTransparent(color)) {
+    return null;
+  }
+  const tc = tinycolor(color);
+  if (!tc.isValid()) {
+    return null;
+  }
+  const { h, s, v } = tc.toHsv();
+  return { h, s, v };
+};
+
+/** Builds an opaque hex color from HSV (tinycolor2 semantics). */
+export const hsvToOpaqueHex = ({ h, s, v }: HsvColor): string | null => {
+  const safeH = Number.isFinite(h) ? h : 0;
+  const tc = tinycolor({ h: safeH, s, v });
+  if (!tc.isValid()) {
+    return null;
+  }
+  const rgb = tc.toRgb();
+  return rgbToHex(rgb.r, rgb.g, rgb.b);
+};
