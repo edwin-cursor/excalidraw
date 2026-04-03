@@ -16,6 +16,7 @@ import { useAtom } from "../../editor-jotai";
 import { t } from "../../i18n";
 
 import { CustomColorList } from "./CustomColorList";
+import { HueSaturationWheel } from "./HueSaturationWheel";
 import PickerColorList from "./PickerColorList";
 import PickerHeading from "./PickerHeading";
 import { ShadeList } from "./ShadeList";
@@ -167,6 +168,13 @@ export const Picker = React.forwardRef(
           tabIndex={-1}
         >
           {title && <div className="color-picker__title">{title}</div>}
+
+          {type === "elementStroke" && (
+            <div>
+              <PickerHeading>{t("colorPicker.colorWheel")}</PickerHeading>
+              <HueSaturationWheel color={color} onChange={onChange} />
+            </div>
+          )}
 
           {!!customColors.length && (
             <div>
