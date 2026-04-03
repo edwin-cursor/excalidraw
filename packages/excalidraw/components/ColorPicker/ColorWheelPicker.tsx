@@ -1,5 +1,7 @@
 import { useCallback, useRef } from "react";
 
+import clsx from "clsx";
+
 import { clamp } from "@excalidraw/math";
 
 import { colorToHsvForWheel, hsvToHex } from "@excalidraw/common";
@@ -11,6 +13,8 @@ import "./ColorWheelPicker.scss";
 type ColorWheelPickerProps = {
   color: string | null;
   onChange: (hex: string) => void;
+  /** Compact toolbar variant: no heading, smaller wheel */
+  variant?: "default" | "compact";
 };
 
 const polarFromClientPoint = (
@@ -38,6 +42,7 @@ const polarFromClientPoint = (
 export const ColorWheelPicker = ({
   color,
   onChange,
+  variant = "default",
 }: ColorWheelPickerProps) => {
   const wheelRef = useRef<HTMLDivElement>(null);
 
@@ -69,10 +74,16 @@ export const ColorWheelPicker = ({
   );
 
   return (
-    <div className="color-wheel-picker">
-      <div className="color-wheel-picker__heading">
-        {t("colorPicker.colorWheel")}
-      </div>
+    <div
+      className={clsx("color-wheel-picker", {
+        "color-wheel-picker--compact": variant === "compact",
+      })}
+    >
+      {variant === "default" && (
+        <div className="color-wheel-picker__heading">
+          {t("colorPicker.colorWheel")}
+        </div>
+      )}
       <div
         ref={wheelRef}
         className="color-wheel-picker__wheel"

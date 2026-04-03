@@ -18,16 +18,24 @@
     opacity: 0.85;
   }
 
+  .color-wheel-picker--compact {
+    padding: 0;
+    align-items: center;
+    justify-content: center;
+  }
+
   .color-wheel-picker__wheel {
     --color-wheel-pointer-r: 5px;
+    --color-wheel-size: 7rem;
+    --color-wheel-radius: calc(var(--color-wheel-size) / 2);
     /* Thumb travels from center (s=0) to near rim (s=1) */
     --color-wheel-thumb-travel: calc(
-      3.5rem - var(--color-wheel-pointer-r) - 3px
+      var(--color-wheel-radius) - var(--color-wheel-pointer-r) - 3px
     );
 
     position: relative;
-    width: 7rem;
-    height: 7rem;
+    width: var(--color-wheel-size);
+    height: var(--color-wheel-size);
     flex-shrink: 0;
     border-radius: 50%;
     cursor: crosshair;
@@ -74,5 +82,10 @@
     transform-origin: 50% 50%;
     transform: rotate(0deg)
       translateY(calc(-1 * var(--color-wheel-thumb-travel)));
+  }
+
+  .color-wheel-picker--compact .color-wheel-picker__wheel {
+    --color-wheel-size: 4.25rem;
+    --color-wheel-pointer-r: 4px;
   }
 }

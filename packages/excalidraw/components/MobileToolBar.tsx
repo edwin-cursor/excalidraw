@@ -11,6 +11,7 @@ import { isHandToolActive } from "../appState";
 
 import { useTunnels } from "../context/tunnels";
 
+import { ColorWheelPicker } from "./ColorPicker/ColorWheelPicker";
 import { HandButton } from "./HandButton";
 import { ToolButton } from "./ToolButton";
 import DropdownMenu from "./dropdownMenu/DropdownMenu";
@@ -245,6 +246,14 @@ export const MobileToolBar = ({
         data-testid="toolbar-freedraw"
         onChange={() => handleToolChange("freedraw")}
       />
+
+      {activeTool.type === "freedraw" && (
+        <ColorWheelPicker
+          variant="compact"
+          color={app.state.currentItemStrokeColor}
+          onChange={(hex) => setAppState({ currentItemStrokeColor: hex })}
+        />
+      )}
 
       {/* Eraser */}
       <ToolButton
