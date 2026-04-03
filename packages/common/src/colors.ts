@@ -292,6 +292,39 @@ export const colorToHex = (color: string): string | null => {
   return rgbToHex(r, g, b, a);
 };
 
+/** HSV components as used by the color wheel (hue 0–360, saturation/value/alpha 0–1). */
+export type ColorHsv = {
+  h: number;
+  s: number;
+  v: number;
+  a: number;
+};
+
+/**
+ * Parses a CSS color string to HSV. Returns null if invalid.
+ * Alpha is preserved for hex output via {@link hsvToHex}.
+ */
+export const colorToHsv = (color: string): ColorHsv | null => {
+  const tc = tinycolor(color);
+  if (!tc.isValid()) {
+    return null;
+  }
+  const hsv = tc.toHsv();
+  return { h: hsv.h, s: hsv.s, v: hsv.v, a: hsv.a };
+};
+
+/** Builds a #RRGGBB or #RRGGBBAA string from HSV components. */
+export const hsvToHex = (
+  h: number,
+  s: number,
+  v: number,
+  a: number = 1,
+): string => {
+  const tc = tinycolor({ h, s, v, a });
+  const { r, g, b } = tc.toRgb();
+  return rgbToHex(r, g, b, a);
+};
+
 export const isTransparent = (color: string) => {
   return tinycolor(color).getAlpha() === 0;
 };

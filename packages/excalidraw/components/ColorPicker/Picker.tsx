@@ -16,6 +16,7 @@ import { useAtom } from "../../editor-jotai";
 import { t } from "../../i18n";
 
 import { CustomColorList } from "./CustomColorList";
+import { ColorWheel } from "./ColorWheel";
 import PickerColorList from "./PickerColorList";
 import PickerHeading from "./PickerHeading";
 import { ShadeList } from "./ShadeList";
@@ -202,6 +203,12 @@ export const Picker = React.forwardRef(
               showHotKey={showHotKey}
             />
           </div>
+
+          <div>
+            <PickerHeading>{t("colorPicker.colorWheel")}</PickerHeading>
+            <ColorWheel color={color} onChange={onChange} />
+          </div>
+
           {children}
         </div>
       </div>
